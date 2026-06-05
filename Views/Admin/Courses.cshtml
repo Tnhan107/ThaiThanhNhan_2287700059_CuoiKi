@@ -1,0 +1,45 @@
+@model IReadOnlyList<Course>
+
+@{
+    ViewData["Title"] = "Manage Courses";
+}
+
+<section class="page-heading admin-heading">
+    <div>
+        <p class="eyebrow">Admin</p>
+        <h1>CRUD học phần</h1>
+        <p class="page-subtitle">Tạo, sửa và xóa học phần cho hệ thống đăng ký.</p>
+    </div>
+    <a class="btn btn-primary" asp-action="Create">Create Course</a>
+</section>
+
+<section class="content-panel">
+    <div class="table-responsive">
+        <table class="table align-middle admin-table">
+            <thead>
+                <tr>
+                    <th>Tên học phần</th>
+                    <th>Danh mục</th>
+                    <th>Tín chỉ</th>
+                    <th>Giảng viên</th>
+                    <th class="text-end">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var course in Model)
+                {
+                    <tr>
+                        <td class="fw-semibold">@course.Name</td>
+                        <td>@course.Category?.Name</td>
+                        <td>@course.Credits</td>
+                        <td>@course.Lecturer</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@course.Id">Edit</a>
+                            <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@course.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>

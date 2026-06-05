@@ -1,0 +1,90 @@
+@model CourseListViewModel
+
+@{
+    var controller = (string?)ViewData["ListController"] ?? "Courses";
+    var action = (string?)ViewData["ListAction"] ?? "Index";
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+    var fallbackImage = Url.Content("~/images/course-placeholder.svg");
+}
+
+<form asp-controller="@controller" asp-action="@action" method="get" class="toolbar">
+    <div class="search-box">
+        <input class="form-control" type="search" name="search" value="@Model.Search" placeholder="Tìm theo tên học phần" />
+        <button class="btn btn-primary" type="submit">Search</button>
+        @if (!string.IsNullOrWhiteSpace(Model.Search))
+        {
+            <a class="btn btn-outline-secondary" asp-controller="@controller" asp-action="@action">Clear</a>
+        }
+    </div>
+    <div class="result-count">
+        @Model.TotalItems học phần
+    </div>
+</form>
+
+@if (!Model.Courses.Any())
+{
+    <div class="empty-state">
+        <h2>Không tìm thấy học phần</h2>
+        <p>Thử tìm kiếm với từ khóa khác.</p>
+    </div>
+}
+else
+{
+    <div class="course-grid">
+        @foreach (var course in Model.Courses)
+        {
+            var image = string.IsNullOrWhiteSpace(course.Image) ? fallbackImage : course.Image;
+            <article class="course-card">
+                <img class="course-image" src="@image" alt="@course.Name" onerror="this.src='@fallbackImage'; this.onerror=null;" />
+                <div class="course-body">
+                    <div class="course-meta">
+                        <span>@course.CategoryName</span>
+                        <span>@course.Credits tín chỉ</span>
+                    </div>
+                    <h2>@course.Name</h2>
+                    <p>Giảng viên: <strong>@course.Lecturer</strong></p>
+                    <div class="course-actions">
+                        @if (User.IsInRole(RoleNames.Student))
+                        {
+                            if (course.IsEnrolled)
+                            {
+                                <form asp-controller="Enroll" asp-action="Cancel" asp-route-courseId="@course.Id" method="post">
+                                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                    <button class="btn btn-outline-danger w-100" type="submit">Hủy đăng ký</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form asp-controller="Enroll" asp-action="Create" asp-route-courseId="@course.Id" method="post">
+                                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                    <button class="btn btn-success w-100" type="submit">Enroll</button>
+                                </form>
+                            }
+                        }
+                        else if (!User.Identity?.IsAuthenticated ?? true)
+                        {
+                            <a class="btn btn-outline-primary w-100" asp-controller="Account" asp-action="Login">Login để đăng ký</a>
+                        }
+                    </div>
+                </div>
+            </article>
+        }
+    </div>
+
+    <nav class="pagination-wrap" aria-label="Course pagination">
+        <ul class="pagination mb-0">
+            <li class="page-item @(Model.HasPreviousPage ? string.Empty : "disabled")">
+                <a class="page-link" asp-controller="@controller" asp-action="@action" asp-route-page="@(Model.Page - 1)" asp-route-search="@Model.Search">Previous</a>
+            </li>
+            @for (var i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.Page ? "active" : string.Empty)">
+                    <a class="page-link" asp-controller="@controller" asp-action="@action" asp-route-page="@i" asp-route-search="@Model.Search">@i</a>
+                </li>
+            }
+            <li class="page-item @(Model.HasNextPage ? string.Empty : "disabled")">
+                <a class="page-link" asp-controller="@controller" asp-action="@action" asp-route-page="@(Model.Page + 1)" asp-route-search="@Model.Search">Next</a>
+            </li>
+        </ul>
+    </nav>
+}

@@ -1,0 +1,17 @@
+@model CourseListViewModel
+
+@{
+    ViewData["Title"] = "Home";
+    ViewData["ListController"] = "Home";
+    ViewData["ListAction"] = "Index";
+}
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Course Registration Application</p>
+        <h1>Danh sách học phần</h1>
+        <p class="page-subtitle">Sinh viên có thể xem học phần, tìm kiếm, đăng ký và quản lý các học phần đã chọn.</p>
+    </div>
+</section>
+
+<partial name="_CourseList" model="Model" />

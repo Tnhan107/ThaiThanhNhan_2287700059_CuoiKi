@@ -1,0 +1,19 @@
+@model CourseFormViewModel
+
+@{
+    ViewData["Title"] = "Create Course";
+    ViewData["SubmitText"] = "Create Course";
+}
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Admin</p>
+        <h1>Create Course</h1>
+    </div>
+</section>
+
+<partial name="_CourseForm" model="Model" />
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

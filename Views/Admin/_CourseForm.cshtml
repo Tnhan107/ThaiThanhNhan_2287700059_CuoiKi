@@ -1,0 +1,44 @@
+@model CourseFormViewModel
+
+<section class="form-panel">
+    <form method="post">
+        @Html.AntiForgeryToken()
+        <input asp-for="Id" type="hidden" />
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="row g-3">
+            <div class="col-md-8">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="Credits" class="form-label"></label>
+                <input asp-for="Credits" class="form-control" type="number" min="1" max="10" />
+                <span asp-validation-for="Credits" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Lecturer" class="form-label"></label>
+                <input asp-for="Lecturer" class="form-control" />
+                <span asp-validation-for="Lecturer" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="CategoryId" class="form-label"></label>
+                <select asp-for="CategoryId" asp-items="Model.Categories" class="form-select">
+                    <option value="">Chọn danh mục</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="Image" class="form-label"></label>
+                <input asp-for="Image" class="form-control" placeholder="https://..." />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">@ViewData["SubmitText"]</button>
+            <a class="btn btn-outline-secondary" asp-action="Courses">Back</a>
+        </div>
+    </form>
+</section>

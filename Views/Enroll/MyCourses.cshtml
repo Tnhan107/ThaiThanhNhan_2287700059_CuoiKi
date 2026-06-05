@@ -1,0 +1,49 @@
+@model MyCoursesViewModel
+
+@{
+    ViewData["Title"] = "My Courses";
+    var fallbackImage = Url.Content("~/images/course-placeholder.svg");
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+}
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Student</p>
+        <h1>My Courses</h1>
+        <p class="page-subtitle">Danh sách học phần bạn đã đăng ký.</p>
+    </div>
+</section>
+
+@if (!Model.Courses.Any())
+{
+    <div class="empty-state">
+        <h2>Bạn chưa đăng ký học phần nào</h2>
+        <p>Quay lại danh sách học phần để chọn môn học phù hợp.</p>
+        <a class="btn btn-primary" asp-controller="Courses" asp-action="Index">Xem học phần</a>
+    </div>
+}
+else
+{
+    <div class="course-grid">
+        @foreach (var course in Model.Courses)
+        {
+            var image = string.IsNullOrWhiteSpace(course.Image) ? fallbackImage : course.Image;
+            <article class="course-card">
+                <img class="course-image" src="@image" alt="@course.Name" onerror="this.src='@fallbackImage'; this.onerror=null;" />
+                <div class="course-body">
+                    <div class="course-meta">
+                        <span>@course.CategoryName</span>
+                        <span>@course.Credits tín chỉ</span>
+                    </div>
+                    <h2>@course.Name</h2>
+                    <p>Giảng viên: <strong>@course.Lecturer</strong></p>
+                    <p class="registered-date">Ngày đăng ký: @course.EnrollDate.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</p>
+                    <form asp-controller="Enroll" asp-action="Cancel" asp-route-courseId="@course.CourseId" method="post">
+                        <input type="hidden" name="returnUrl" value="@returnUrl" />
+                        <button class="btn btn-outline-danger w-100" type="submit">Hủy đăng ký</button>
+                    </form>
+                </div>
+            </article>
+        }
+    </div>
+}

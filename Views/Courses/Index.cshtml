@@ -1,0 +1,17 @@
+@model CourseListViewModel
+
+@{
+    ViewData["Title"] = "Courses";
+    ViewData["ListController"] = "Courses";
+    ViewData["ListAction"] = "Index";
+}
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Courses</p>
+        <h1>Tất cả học phần</h1>
+        <p class="page-subtitle">Tìm theo tên học phần và duyệt danh sách với phân trang 5 học phần mỗi trang.</p>
+    </div>
+</section>
+
+<partial name="_CourseList" model="Model" />

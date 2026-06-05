@@ -1,0 +1,55 @@
+@model LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<section class="auth-layout">
+    <div class="auth-copy">
+        <p class="eyebrow">Course Registration</p>
+        <h1>Login</h1>
+        <p>Đăng nhập bằng Identity. Sau khi đăng nhập thành công, hệ thống chuyển về trang Home.</p>
+    </div>
+    <div class="auth-panel">
+        <form asp-action="Login" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <div class="mb-3">
+                <label asp-for="UserName" class="form-label"></label>
+                <input asp-for="UserName" class="form-control" autocomplete="username" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" class="form-control" autocomplete="current-password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-check mb-4">
+                <input asp-for="RememberMe" class="form-check-input" />
+                <label asp-for="RememberMe" class="form-check-label"></label>
+            </div>
+            <button class="btn btn-primary w-100" type="submit">Login</button>
+        </form>
+
+        @if (Model.ExternalLogins.Any())
+        {
+            <div class="external-login">
+                <span>External Login</span>
+                @foreach (var provider in Model.ExternalLogins)
+                {
+                    <form asp-action="ExternalLogin" method="post">
+                        <input type="hidden" name="provider" value="@provider.Name" />
+                        <button class="btn btn-outline-dark w-100" type="submit">Login bằng @provider.DisplayName</button>
+                    </form>
+                }
+            </div>
+        }
+
+        <div class="auth-switch">
+            <a asp-action="Register">Chưa có tài khoản? Register</a>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

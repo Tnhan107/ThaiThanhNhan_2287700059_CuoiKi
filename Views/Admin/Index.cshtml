@@ -1,0 +1,54 @@
+@model DashboardViewModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<section class="page-heading admin-heading">
+    <div>
+        <p class="eyebrow">Admin</p>
+        <h1>Dashboard thống kê</h1>
+        <p class="page-subtitle">Tổng quan số học phần, sinh viên và lượt đăng ký trong hệ thống.</p>
+    </div>
+    <a class="btn btn-primary" asp-action="Courses">Quản lý học phần</a>
+</section>
+
+<section class="stat-grid">
+    <div class="stat-card">
+        <span>Tổng học phần</span>
+        <strong>@Model.TotalCourses</strong>
+    </div>
+    <div class="stat-card">
+        <span>Tổng sinh viên</span>
+        <strong>@Model.TotalStudents</strong>
+    </div>
+    <div class="stat-card">
+        <span>Tổng lượt đăng ký</span>
+        <strong>@Model.TotalEnrollments</strong>
+    </div>
+</section>
+
+<section class="content-panel">
+    <div class="panel-header">
+        <h2>Học phần theo danh mục</h2>
+    </div>
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Danh mục</th>
+                    <th class="text-end">Số học phần</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.CoursesByCategory)
+                {
+                    <tr>
+                        <td>@item.CategoryName</td>
+                        <td class="text-end fw-semibold">@item.CourseCount</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
